@@ -6,12 +6,12 @@ export class CharactersController {
   constructor(private readonly charactersService: CharactersService) {}
 
   @Get()
-  findAll() {
+  public findAll() {
     return this.charactersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.charactersService.findOne(+id);
+  public findOne(@Param('id') id: string) {
+    return this.charactersService.findOne(id);
   }
 }

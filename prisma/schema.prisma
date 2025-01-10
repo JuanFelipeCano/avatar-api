@@ -14,8 +14,8 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model Character {
-  id          String   @id @default(uuid())
+model Characters {
+  id          String   @id
   name        String
   element     String
   description String

@@ -14,11 +14,69 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model Characters {
-  id          String   @id
-  name        String
-  element     String
+model character_types {
+  id          Int       @id @default(autoincrement())
   description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  character_relations character_relations[]
+}
+
+model skill_types {
+  id          Int       @id @default(autoincrement())
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  skills skills[]
+}
+
+model skills {
+  id          String    @id
+  name        String
+  description String?
+  image_url   String?
+  type_id     Int
+  skill_id    String?   @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  type     skill_types @relation(fields: [type_id], references: [id])
+  subSkill skills?     @relation("SkillHierarchy", fields: [skill_id], references: [id])
+
+  skills           skills[]           @relation("SkillHierarchy")
+  character_skills character_skills[]
+}
+
+model characters {
+  id          String    @id
+  name        String
+  description String?
+  image_url   String?
+  source_url  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  character_skills    character_skills[]
+  character_relations character_relations[] @relation("CharacterToRelation")
+  character_relation  character_relations[] @relation("RelationToCharacter")
+}
+
+model character_skills {
+  character_id String
+  skill_id     String @unique
+
+  character characters @relation(fields: [character_id], references: [id])
+  skill     skills     @relation(fields: [skill_id], references: [id])
+}
+
+model character_relations {
+  character_id     String @unique
+  relation_id      String @unique
+  relation_type_id Int
+
+  character characters      @relation("CharacterToRelation", fields: [character_id], references: [id])
+  relation  characters      @relation("RelationToCharacter", fields: [relation_id], references: [id])
+  type      character_types @relation(fields: [relation_type_id], references: [id])
 }

@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
+async function initialTypes() {
   const enemyType = await prisma.character_types.upsert({
     where: { id: 1 },
     update: {},
@@ -39,6 +39,15 @@ async function main() {
     },
   });
 
+  console.log({
+    enemyType,
+    allyType,
+    bendingType,
+    otherType,
+  });
+}
+
+async function skills() {
   const airBending = await prisma.skills.upsert({
     where: { id: 'b17e42f9-fd9e-44c7-b827-1f8ba240092f' },
     update: {},
@@ -95,7 +104,16 @@ async function main() {
     },
   });
 
+  console.log({
+    airBending,
+    fireBending,
+    waterBending,
+    earthBending,
+    metalBending,
+  });
+}
 
+async function characters() {
   const aang = await prisma.characters.upsert({
     where: { id: 'a4c505ce-2e19-46fc-9447-f2d9f4f1401d' },
     update: {},
@@ -132,6 +150,14 @@ async function main() {
     },
   });
 
+  console.log({
+    aang,
+    katara,
+    zuko,
+  });
+}
+
+async function characterSkills() {
   const aangSkills = await prisma.character_skills.upsert({
     where: { id: 1 },
     update: {},
@@ -159,6 +185,14 @@ async function main() {
     },
   });
 
+  console.log({
+    aangSkills,
+    kataraSkills,
+    zukoSkills,
+  });
+}
+
+async function characterRelations() {
   const anngRelations = await prisma.character_relations.upsert({
     where: { id: 1 },
     update: {},
@@ -170,23 +204,16 @@ async function main() {
   });
 
   console.log({
-    enemyType,
-    allyType,
-    bendingType,
-    otherType,
-    airBending,
-    fireBending,
-    waterBending,
-    earthBending,
-    metalBending,
-    aang,
-    katara,
-    zuko,
-    aangSkills,
-    kataraSkills,
-    zukoSkills,
     anngRelations,
   });
+}
+
+async function main() {
+  await initialTypes();
+  await skills();
+  await characters();
+  await characterSkills();
+  await characterRelations();
 }
 
 // execute the main function

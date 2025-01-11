@@ -38,12 +38,13 @@ model skills {
   description String?
   image_url   String?
   type_id     Int
-  skill_id    String?   @unique
+  skill_id    String?
+  source_url  String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
 
-  type     skill_types @relation(fields: [type_id], references: [id])
-  subSkill skills?     @relation("SkillHierarchy", fields: [skill_id], references: [id])
+  type      skill_types @relation(fields: [type_id], references: [id])
+  sub_skill skills?     @relation("SkillHierarchy", fields: [skill_id], references: [id])
 
   skills           skills[]           @relation("SkillHierarchy")
   character_skills character_skills[]

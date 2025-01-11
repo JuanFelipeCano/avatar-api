@@ -38,6 +38,7 @@ export class CharactersService {
     });
 
     return {
+      charactersMapped,
       data: CharacterMapper.mapList(charactersMapped, host),
     };
   }

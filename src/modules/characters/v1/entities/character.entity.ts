@@ -1,3 +1,5 @@
+import { Skill } from '../../../skills/v1/entities';
+
 export class Character {
   id: string;
   name: string;
@@ -11,15 +13,8 @@ export class Character {
 }
 
 export class SkillTypes {
-  bending?: Omit<Skill, 'subSkills'>[];
-  other?: Omit<Skill, 'subSkills'>[];
+  bending?: CharacterSkill[];
+  other?: CharacterSkill[];
 }
 
-export class Skill {
-  id: string;
-  name: string;
-  description?: string;
-  imageUrl?: string;
-  url: string;
-  subSkills?: Skill[];
-}
+export type CharacterSkill = Omit<Skill, 'subSkills' | 'type'>;

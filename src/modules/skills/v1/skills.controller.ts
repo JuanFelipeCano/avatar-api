@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Param, Req } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 
 @Controller({
@@ -8,14 +8,21 @@ import { SkillsService } from './skills.service';
 export class SkillsController {
   constructor(private readonly skillsService: SkillsService) {}
 
-
   @Get()
-  findAll() {
-    return this.skillsService.findAll();
+  public async findAll(@Req() request: Request) {
+    try {
+      return await this.skillsService.findAll(request.headers['host']);
+    } catch (error) {
+      throw new HttpException('Error processing', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.skillsService.findOne(+id);
+  public async findOne(@Param('id') id: string, @Req() request: Request) {
+    try {
+      return await this.skillsService.findOne(id, request.headers['host']);
+    } catch (error) {
+      throw new HttpException('Error processing', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

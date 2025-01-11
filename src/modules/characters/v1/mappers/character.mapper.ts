@@ -1,4 +1,4 @@
-import { CharacterType, SkillType } from '../../../constants';
+import { CharacterType, SkillType } from '../../../../constants';
 import { Character } from '../entities/character.entity';
 import { RelationsMapper } from './relations.mapper';
 import { SkillsMapper } from './skills.mapper';

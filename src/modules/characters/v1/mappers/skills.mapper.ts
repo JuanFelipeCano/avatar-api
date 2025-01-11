@@ -1,4 +1,4 @@
-import { SkillType } from '../../../constants';
+import { SkillType } from '../../../../constants';
 import { Skill } from '../entities/character.entity';
 
 const map = (skill: any, host: string): Skill => {

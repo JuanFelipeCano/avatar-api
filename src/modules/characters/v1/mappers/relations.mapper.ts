@@ -1,4 +1,4 @@
-import { CharacterType } from '../../../constants';
+import { CharacterType } from '../../../../constants';
 
 const map = (relation: any): string => {
   return relation.related ? relation.related.name : relation.character.name;

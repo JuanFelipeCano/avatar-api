@@ -120,11 +120,20 @@ async function main() {
     },
   });
 
-  const aangSkills = await prisma.character_skills.upsert({
-    where: {
-      character_id: 'a4c505ce-2e19-46fc-9447-f2d9f4f1401d',
-      skill_id: 'b17e42f9-fd9e-44c7-b827-1f8ba240092f',
+  const zuko = await prisma.characters.upsert({
+    where: { id: '2c413457-465f-4135-a288-120582ae62e9' },
+    update: {},
+    create: {
+      id: '2c413457-465f-4135-a288-120582ae62e9',
+      name: 'Zuko',
+      description: 'The exiled prince of the Fire Nation.',
+      source_url: 'https://avatar.fandom.com/wiki/Zuko',
+      image_url: 'https://sm.ign.com/t/ign_latam/screenshot/default/zuko_352t.1280.jpg',
     },
+  });
+
+  const aangSkills = await prisma.character_skills.upsert({
+    where: { id: 1 },
     update: {},
     create: {
       character_id: 'a4c505ce-2e19-46fc-9447-f2d9f4f1401d',
@@ -133,10 +142,7 @@ async function main() {
   });
 
   const kataraSkills = await prisma.character_skills.upsert({
-    where: {
-      character_id: '6b22bc26-4732-4a65-8640-48306df2b75d',
-      skill_id: '101bc91d-34b4-4e68-89b8-27f00603e276',
-    },
+    where: { id: 2 },
     update: {},
     create: {
       character_id: '6b22bc26-4732-4a65-8640-48306df2b75d',
@@ -144,11 +150,17 @@ async function main() {
     },
   });
 
-  const anngRelations = await prisma.character_relations.upsert({
-    where: {
-      character_id: 'a4c505ce-2e19-46fc-9447-f2d9f4f1401d',
-      relation_id: '6b22bc26-4732-4a65-8640-48306df2b75d',
+  const zukoSkills = await prisma.character_skills.upsert({
+    where: { id: 3 },
+    update: {},
+    create: {
+      character_id: '2c413457-465f-4135-a288-120582ae62e9',
+      skill_id: 'ba1654f6-033c-4873-aa29-40c0b58f81c6',
     },
+  });
+
+  const anngRelations = await prisma.character_relations.upsert({
+    where: { id: 1 },
     update: {},
     create: {
       character_id: 'a4c505ce-2e19-46fc-9447-f2d9f4f1401d',
@@ -169,8 +181,10 @@ async function main() {
     metalBending,
     aang,
     katara,
+    zuko,
     aangSkills,
     kataraSkills,
+    zukoSkills,
     anngRelations,
   });
 }

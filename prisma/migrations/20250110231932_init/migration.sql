@@ -47,28 +47,31 @@ CREATE TABLE "characters" (
 
 -- CreateTable
 CREATE TABLE "character_skills" (
+    "id" SERIAL NOT NULL,
     "character_id" TEXT NOT NULL,
-    "skill_id" TEXT NOT NULL
+    "skill_id" TEXT NOT NULL,
+
+    CONSTRAINT "character_skills_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "character_relations" (
+    "id" SERIAL NOT NULL,
     "character_id" TEXT NOT NULL,
     "relation_id" TEXT NOT NULL,
-    "relation_type_id" INTEGER NOT NULL
+    "relation_type_id" INTEGER NOT NULL,
+
+    CONSTRAINT "character_relations_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "skills_skill_id_key" ON "skills"("skill_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "character_skills_skill_id_key" ON "character_skills"("skill_id");
+CREATE UNIQUE INDEX "character_skills_character_id_skill_id_key" ON "character_skills"("character_id", "skill_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "character_relations_character_id_key" ON "character_relations"("character_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "character_relations_relation_id_key" ON "character_relations"("relation_id");
+CREATE UNIQUE INDEX "character_relations_character_id_relation_id_relation_type__key" ON "character_relations"("character_id", "relation_id", "relation_type_id");
 
 -- AddForeignKey
 ALTER TABLE "skills" ADD CONSTRAINT "skills_type_id_fkey" FOREIGN KEY ("type_id") REFERENCES "skill_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

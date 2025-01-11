@@ -58,25 +58,31 @@ model characters {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
 
-  character_skills    character_skills[]
-  character_relations character_relations[] @relation("CharacterToRelation")
-  character_relation  character_relations[] @relation("RelationToCharacter")
+  character_skills   character_skills[]
+  character_relateds character_relations[] @relation("CharacterToRelated")
+  relateds_character character_relations[] @relation("RelatedToCharacter")
 }
 
 model character_skills {
+  id           Int    @id @default(autoincrement())
   character_id String
-  skill_id     String @unique
+  skill_id     String
 
   character characters @relation(fields: [character_id], references: [id])
   skill     skills     @relation(fields: [skill_id], references: [id])
+
+  @@unique([character_id, skill_id])
 }
 
 model character_relations {
-  character_id     String @unique
-  relation_id      String @unique
+  id               Int    @id @default(autoincrement())
+  character_id     String
+  relation_id      String
   relation_type_id Int
 
-  character characters      @relation("CharacterToRelation", fields: [character_id], references: [id])
-  relation  characters      @relation("RelationToCharacter", fields: [relation_id], references: [id])
+  character characters      @relation("CharacterToRelated", fields: [character_id], references: [id])
+  related   characters      @relation("RelatedToCharacter", fields: [relation_id], references: [id])
   type      character_types @relation(fields: [relation_type_id], references: [id])
+
+  @@unique([character_id, relation_id, relation_type_id])
 }

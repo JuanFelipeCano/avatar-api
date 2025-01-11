@@ -1,25 +1,60 @@
 import { Injectable } from '@nestjs/common';
-import { Character } from './entities/character.entity';
 import { PrismaService } from '../../prisma/prisma.service';
+import { CharacterMapper } from './mappers';
 
 @Injectable()
 export class CharactersService {
 
+  private readonly _include = {
+    character_skills: {
+      include: {
+        skill: true,
+      },
+    },
+    character_relateds: {
+      include: {
+        related: true,
+      },
+    },
+    relateds_character: {
+      include: {
+        character: true,
+      },
+    },
+  };
+
   constructor(private readonly prisma: PrismaService) {}
 
-  private readonly characters: Character[] = [
-    { id: 1, name: 'Aang', element: 'Air', description: 'The last Airbender and Avatar.' },
-    { id: 2, name: 'Katara', element: 'Water', description: 'A waterbender from the Southern Water Tribe.' },
-    { id: 3, name: 'Zuko', element: 'Fire', description: 'The exiled prince of the Fire Nation.' },
-  ];
+  public async findAll(host: string) {
+    const characters = await this.prisma.characters.findMany({
+      include: this._include,
+    });
 
-  public async findAll() {
-    return await this.prisma.characters.findMany();
+    const charactersMapped = characters.map((character) => {
+      return {
+        ...character,
+        relations: [...character.character_relateds, ...character.relateds_character],
+      }
+    });
+
+    return {
+      data: CharacterMapper.mapList(charactersMapped, host),
+    };
   }
 
-  public async findOne(id: string) {
-    return await this.prisma.characters.findUnique({
+  public async findOne(id: string, host: string) {
+    const character = await this.prisma.characters.findUnique({
       where: { id },
+      include: this._include,
     });
+
+    const mappedCharacter = {
+      ...character,
+      relations: [...character.character_relateds, ...character.relateds_character],
+    };
+
+    return {
+      data: CharacterMapper.map(mappedCharacter, host),
+    }
   }
 }

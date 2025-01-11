@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Param, Req } from '@nestjs/common';
 import { CharactersService } from './characters.service';
 
 @Controller({
@@ -9,12 +9,20 @@ export class CharactersController {
   constructor(private readonly charactersService: CharactersService) {}
 
   @Get()
-  public findAll() {
-    return this.charactersService.findAll();
+  public async findAll(@Req() request: Request) {
+    try {
+      return await this.charactersService.findAll(request.headers['host']);
+    } catch (error) {
+      throw new HttpException('Error processing', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get(':id')
-  public findOne(@Param('id') id: string) {
-    return this.charactersService.findOne(id);
+  public async findOne(@Req() request: Request, @Param('id') id: string) {
+    try {
+      return await this.charactersService.findOne(id, request.headers['host']);
+    } catch (error) {
+      throw new HttpException('Error processing', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
